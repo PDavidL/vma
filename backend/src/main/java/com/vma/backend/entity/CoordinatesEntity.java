@@ -28,8 +28,11 @@ public class CoordinatesEntity {
 	private Date timestamp;
 
 	@ManyToOne
-	@JoinColumn(name = "vehicleId", referencedColumnName = "id", nullable = false)
+	@JoinColumn(name = "vehicle_id", insertable = false, updatable = false, referencedColumnName = "id", nullable = false)
 	private VehicleEntity vehicle;
+
+	@Column(name = "vehicle_id")
+	private Integer vehicleId;
 
 	public Integer getId() {
 		return id;
@@ -69,5 +72,13 @@ public class CoordinatesEntity {
 
 	public void setVehicle(VehicleEntity vehicle) {
 		this.vehicle = vehicle;
+	}
+
+	public Integer getVehicleId() {
+		return vehicleId;
+	}
+
+	public void setVehicleId(Integer vehicleId) {
+		this.vehicleId = vehicleId;
 	}
 }

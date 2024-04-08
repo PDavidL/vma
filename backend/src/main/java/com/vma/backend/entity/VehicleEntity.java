@@ -20,7 +20,7 @@ public class VehicleEntity {
 	private List<CoordinatesEntity> coordinates;
 
 	@OneToMany(mappedBy = "vehicle")
-	private List<MessageEntity> messages;
+	private List<NotificationEntity> notifications;
 
 	public Integer getId() {
 		return id;
@@ -38,11 +38,11 @@ public class VehicleEntity {
 		this.coordinates = coordinates;
 	}
 
-	public List<MessageEntity> getMessages() {
-		return messages;
+	public List<NotificationEntity> getNotifications() {
+		return notifications;
 	}
 
-	public void setMessages(List<MessageEntity> messages) {
-		this.messages = messages;
+	public void setNotifications(List<NotificationEntity> notifications) {
+		this.notifications = notifications;
 	}
 }

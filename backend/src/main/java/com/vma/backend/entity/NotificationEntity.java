@@ -11,22 +11,25 @@ import jakarta.persistence.Table;
 import java.util.Date;
 
 @Entity
-@Table(name = "Message")
-public class MessageEntity {
+@Table(name = "Notification")
+public class NotificationEntity {
 
 	@Id
 	@GeneratedValue
 	private Integer id;
 
-	@Column(name = "messageText")
-	private String messageText;
+	@Column(name = "message")
+	private String message;
 
 	@Column(name = "timestamp")
 	private Date timestamp;
 
 	@ManyToOne
-	@JoinColumn(name = "vehicleId", referencedColumnName = "id", nullable = false)
+	@JoinColumn(name = "vehicle_id", insertable = false, updatable = false, referencedColumnName = "id", nullable = false)
 	private VehicleEntity vehicle;
+
+	@Column(name = "vehicle_id")
+	private Integer vehicleId;
 
 	public Integer getId() {
 		return id;
@@ -36,12 +39,12 @@ public class MessageEntity {
 		this.id = id;
 	}
 
-	public String getMessageText() {
-		return messageText;
+	public String getMessage() {
+		return message;
 	}
 
-	public void setMessageText(String messageText) {
-		this.messageText = messageText;
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 	public Date getTimestamp() {
@@ -58,5 +61,13 @@ public class MessageEntity {
 
 	public void setVehicle(VehicleEntity vehicle) {
 		this.vehicle = vehicle;
+	}
+
+	public Integer getVehicleId() {
+		return vehicleId;
+	}
+
+	public void setVehicleId(Integer vehicleId) {
+		this.vehicleId = vehicleId;
 	}
 }
