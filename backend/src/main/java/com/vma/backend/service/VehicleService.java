@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class VehicleService {
@@ -28,12 +29,20 @@ public class VehicleService {
 		return vehicleRepository.save(vehicle);
 	}
 
+	private VehicleEntity getVehicleById(Integer vehicleId) {
+		return vehicleRepository.findById(vehicleId).get();
+	}
+
 	private NotificationEntity createNotification(Integer vehicleId, String message) {
 		NotificationEntity notification = new NotificationEntity();
 		notification.setMessage(message);
 		notification.setVehicleId(vehicleId);
 		notification.setTimestamp(new Date());
 		return notificationRepository.save(notification);
+	}
+
+	private List<NotificationEntity> getNotificationByVehicleId(Integer vehicleId) {
+		return notificationRepository.getNotificationEntitiesByVehicleId(vehicleId);
 	}
 
 	private CoordinatesEntity updateVehicleCoordinates(Integer vehicleId, double latitude, double longitude) {
@@ -44,5 +53,9 @@ public class VehicleService {
 		coordinates.setVehicleId(vehicleId);
 
 		return coordinatesRepository.save(coordinates);
+	}
+
+	private List<CoordinatesEntity> getCoordinatesByVehicleId(Integer vehicleId) {
+		return coordinatesRepository.getCoordinatesEntitiesByVehicleId(vehicleId);
 	}
 }
