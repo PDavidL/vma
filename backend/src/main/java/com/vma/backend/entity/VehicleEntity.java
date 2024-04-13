@@ -1,5 +1,6 @@
 package com.vma.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -17,9 +18,11 @@ public class VehicleEntity {
 	private Integer id;
 
 	@OneToMany(mappedBy = "vehicle")
+	@JsonIgnore
 	private List<CoordinatesEntity> coordinates;
 
 	@OneToMany(mappedBy = "vehicle")
+	@JsonIgnore
 	private List<NotificationEntity> notifications;
 
 	public Integer getId() {

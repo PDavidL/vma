@@ -10,4 +10,6 @@ import java.util.List;
 public interface CoordinatesRepository extends JpaRepository<CoordinatesEntity, Integer> {
 
 	List<CoordinatesEntity> getCoordinatesEntitiesByVehicleId(Integer id);
+
+	CoordinatesEntity findFirstByVehicleIdOrderByTimestampDesc(Integer vehicleId);
 }

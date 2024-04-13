@@ -1,5 +1,6 @@
 package com.vma.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,6 +30,7 @@ public class CoordinatesEntity {
 
 	@ManyToOne
 	@JoinColumn(name = "vehicle_id", insertable = false, updatable = false, referencedColumnName = "id", nullable = false)
+	@JsonBackReference
 	private VehicleEntity vehicle;
 
 	@Column(name = "vehicle_id")

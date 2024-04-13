@@ -1,5 +1,7 @@
 package com.vma.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,9 +28,11 @@ public class NotificationEntity {
 
 	@ManyToOne
 	@JoinColumn(name = "vehicle_id", insertable = false, updatable = false, referencedColumnName = "id", nullable = false)
+	@JsonBackReference
 	private VehicleEntity vehicle;
 
 	@Column(name = "vehicle_id")
+	@JsonProperty("vehicle_id")
 	private Integer vehicleId;
 
 	public Integer getId() {
