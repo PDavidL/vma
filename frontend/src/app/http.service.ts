@@ -4,6 +4,7 @@ import { VehicleDto } from './dto/vehicleDto';
 import { Observable } from 'rxjs';
 import { CoordinateDto } from './dto/coordinateDto';
 import { NotificationDto } from './dto/notificationDto';
+import { VehicleIdWrapperDto } from './dto/vehicleIdWrapperDto';
 
 
 @Injectable({
@@ -16,6 +17,7 @@ export class HttpService {
   private coordinatesUrl: string = "/vehicleCoordinates"
   private latestNotificationUrl: string = "/latestNotification"
   private vehicleLatestPositionAndNotificationUrl: string = "/vehicleLatestPositionAndNotification"
+  private vehiclesInRadiusUrl: string = "/vehicles"
 
   constructor(private http: HttpClient) { }
 
@@ -39,6 +41,14 @@ export class HttpService {
     const params = new HttpParams()
     .set('vehicleId', id);
     return this.http.get<VehicleDto>(this.buildUrl(this.vehicleLatestPositionAndNotificationUrl), {params});
+  }
+
+  getVehiclesInRadius(lat: number, lng: number, radius: number) : Observable<VehicleIdWrapperDto> {
+    const params = new HttpParams()
+    .set('latitude', lat,)
+    .set('longitude', lng)
+    .set('radius', radius);
+    return this.http.get<VehicleIdWrapperDto>(this.buildUrl(this.vehiclesInRadiusUrl), {params});
   }
 
   buildUrl(url : string) : string {

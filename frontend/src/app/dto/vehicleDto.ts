@@ -1,5 +1,3 @@
-import { CoordinateDto } from "./coordinateDto";
-
 export class VehicleDto {
     id: number;
     positionLat: number;

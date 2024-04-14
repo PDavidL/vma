@@ -7,6 +7,7 @@ import { EMPTY, catchError } from 'rxjs';
 import {HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { MarkerDto } from './dto/markerDto';
+import { VehicleIdWrapperDto } from './dto/vehicleIdWrapperDto';
 
 @Component({
   selector: 'app-root',
@@ -20,6 +21,9 @@ export class AppComponent {
   
   title : string = 'Vehicle Monitoring Application';
   vehicles: VehicleDto[] = []
+  latestLat : number|undefined = undefined;
+  latestLng : number|undefined = undefined;
+  queryRadius: number = 200;
   display: any;
   center: google.maps.LatLngLiteral = {
       lat: 47.47581,
@@ -46,13 +50,13 @@ export class AppComponent {
     this.markers = [];
     this.httpService.getVehicleLatestPositionAndNotification(vehicleId).pipe(catchError(() => EMPTY))
     .subscribe(data => {
-      console.log(data)
-      let latestLat : number = data.positionLat;
-      let latestLng : number = data.positionLng;
+      this.latestLat = data.positionLat;
+      this.latestLng = data.positionLng;
+
       this.markers.push({
         position: {
-          lat: latestLat,
-          lng: latestLng,
+          lat: this.latestLat,
+          lng: this.latestLng,
         },
         label: {
           color: 'red',
@@ -61,11 +65,38 @@ export class AppComponent {
         title: 'Vehicle Marker',
         options: { animation: google.maps.Animation.BOUNCE},
       });
-      if (latestLat != null && latestLat != null) {
-        this.setCenter(latestLat, latestLng)
+      if (this.latestLat != undefined && this.latestLat != undefined) {
       }
+    this.setCenter(this.latestLat, this.latestLng);
     this.changeZoom(15);
+
+    if (this.latestLat != undefined && this.latestLng != undefined) {
+      this.httpService.getVehiclesInRadius(this.latestLat, this.latestLng, this.queryRadius).pipe(catchError(() => EMPTY))
+      .subscribe(vehicleIdsInRadius => {
+        vehicleIdsInRadius.vehicles.forEach(element => {
+          console.log(element.id + 5);
+          this.httpService.getVehicleLatestPositionAndNotification(element.id).pipe(catchError(() => EMPTY))
+          .subscribe(data => {
+            this.markers.push({
+              position: {
+                lat: data.positionLat,
+                lng: data.positionLng,
+              },
+              label: {
+                color: 'red',
+                text: 'Vehicle' + (data.id)  + ' in the radius of Vehicle' + (vehicleId),
+              },
+              title: 'Vehicle Marker',
+              options: { animation: google.maps.Animation.BOUNCE},
+            });
+          })
+        })
+      })
+    }
+
+
     })
+
   }
 
   setCenter(latitude: number, longitude: number) {
@@ -85,5 +116,9 @@ export class AppComponent {
 
   changeZoom(event: any) {
     this.zoom = event;
+  }
+
+  updateQueryRadius(event: any) {
+    this.queryRadius = event.target.value;
   }
 }
