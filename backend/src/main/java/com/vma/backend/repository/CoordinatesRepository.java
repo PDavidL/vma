@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface CoordinatesRepository extends JpaRepository<CoordinatesEntity, Integer> {
 
-	List<CoordinatesEntity> getCoordinatesEntitiesByVehicleId(Integer id);
+	List<CoordinatesEntity> getCoordinatesEntitiesByVehicleIdOrderByTimestampDesc(Integer id);
 
 	CoordinatesEntity findFirstByVehicleIdOrderByTimestampDesc(Integer vehicleId);
 }

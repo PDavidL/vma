@@ -10,4 +10,6 @@ import java.util.List;
 public interface NotificationRepository extends JpaRepository<NotificationEntity, Integer> {
 
 	List<NotificationEntity> getNotificationEntitiesByVehicleId(Integer id);
+
+	NotificationEntity getFirstByVehicleIdOrderByTimestampDesc(Integer id);
 }

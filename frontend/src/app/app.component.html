@@ -1,11 +1,27 @@
 <h2 class="title">{{ title }} </h2>
 
-<google-map height="450px"
+<button class="refreshButton" (click)="reloadVehicles()">Reload Vehicles</button>
+
+<div *ngFor="let vehicle of vehicles">
+  <p>Vehicle{{vehicle.id}} </p>
+  <button label="Vehicle" (click)="showOnMap(vehicle.id)">Show on map</button>
+</div>
+
+<google-map #myMap="googleMap"
+            height="450px"
             width="100:%"
             [center]="center"
             [zoom]="zoom"
             (mapClick)="moveMap($event)"
-            (mapMousemove)="move($event)">
+            (mapMousemove)="move($event)"
+            (zoomChanged)="changeZoom($event)">
+    <map-marker
+    *ngFor="let marker of markers"
+    [position]="marker.position"
+    [label]="marker.label"
+    [title]="marker.title"
+    [options]="marker.options"
+    />            
 </google-map>
 
 <div>Latitude: {{display?.lat}}</div>

@@ -41,8 +41,12 @@ public class VehicleService {
 		return notificationRepository.save(notification);
 	}
 
-	public List<NotificationEntity> getNotificationByVehicleId(Integer vehicleId) {
+	public List<NotificationEntity> getNotificationsByVehicleId(Integer vehicleId) {
 		return notificationRepository.getNotificationEntitiesByVehicleId(vehicleId);
+	}
+
+	public NotificationEntity getLatestNotificationByVehicleId(Integer vehicleId) {
+		return notificationRepository.getFirstByVehicleIdOrderByTimestampDesc(vehicleId);
 	}
 
 	public CoordinatesEntity updateVehicleCoordinates(Integer vehicleId, CoordinatesEntity coordinates) {
@@ -53,7 +57,11 @@ public class VehicleService {
 	}
 
 	public List<CoordinatesEntity> getCoordinatesByVehicleId(Integer vehicleId) {
-		return coordinatesRepository.getCoordinatesEntitiesByVehicleId(vehicleId);
+		return coordinatesRepository.getCoordinatesEntitiesByVehicleIdOrderByTimestampDesc(vehicleId);
+	}
+
+	public List<VehicleEntity> getAllVehicles() {
+		return vehicleRepository.findAll();
 	}
 
 	public List<VehicleEntity> getVehiclesInRadius(double latitude, double longitude, double radius) {
@@ -110,5 +118,4 @@ public class VehicleService {
 	private double haversine(double value) {
 		return Math.pow(Math.sin(value / 2), 2);
 	}
-
 }
