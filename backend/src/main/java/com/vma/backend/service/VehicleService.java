@@ -1,5 +1,6 @@
 package com.vma.backend.service;
 
+import com.vma.backend.dto.VehicleDto;
 import com.vma.backend.entity.CoordinatesEntity;
 import com.vma.backend.entity.NotificationEntity;
 import com.vma.backend.entity.VehicleEntity;
@@ -62,6 +63,20 @@ public class VehicleService {
 
 	public List<VehicleEntity> getAllVehicles() {
 		return vehicleRepository.findAll();
+	}
+
+	public VehicleDto getVehicleLatestPositionAndNotification(Integer vehicleId) {
+		VehicleDto vehicleDto = new VehicleDto();
+
+		if (vehicleRepository.existsById(vehicleId)) {
+			vehicleDto.setId(vehicleId);
+		}
+		CoordinatesEntity coordinates = coordinatesRepository.findFirstByVehicleIdOrderByTimestampDesc(vehicleId);
+		vehicleDto.setPositionLat(coordinates != null ? coordinates.getLatitude() : null);
+		vehicleDto.setPositionLng(coordinates != null ? coordinates.getLongitude() : null);
+		NotificationEntity notification = notificationRepository.getFirstByVehicleIdOrderByTimestampDesc(vehicleId);
+		vehicleDto.setNotification(notification != null ? notification.getMessage() : "No notification found");
+		return vehicleDto;
 	}
 
 	public List<VehicleEntity> getVehiclesInRadius(double latitude, double longitude, double radius) {

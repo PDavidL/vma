@@ -6,7 +6,6 @@ import { VehicleDto } from './dto/vehicleDto';
 import { EMPTY, catchError } from 'rxjs';
 import {HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { CoordinateDto } from './dto/coordinateDto';
 import { MarkerDto } from './dto/markerDto';
 
 @Component({
@@ -21,7 +20,6 @@ export class AppComponent {
   
   title : string = 'Vehicle Monitoring Application';
   vehicles: VehicleDto[] = []
-  actualVehicleCoordinates: CoordinateDto[] = []
   display: any;
   center: google.maps.LatLngLiteral = {
       lat: 47.47581,
@@ -46,15 +44,11 @@ export class AppComponent {
 
   showOnMap(vehicleId : number) {
     this.markers = [];
-    let message : string = "No message to display";
-    this.httpService.getLatestNotification(vehicleId).pipe(catchError(() => EMPTY))
-    .subscribe(data => message = data.message)
-
-    this.httpService.getCoordinatesOfVehicle(vehicleId).pipe(catchError(() => EMPTY))
+    this.httpService.getVehicleLatestPositionAndNotification(vehicleId).pipe(catchError(() => EMPTY))
     .subscribe(data => {
-      this.actualVehicleCoordinates = data;
-      let latestLat : number = this.actualVehicleCoordinates[0].latitude;
-      let latestLng : number = this.actualVehicleCoordinates[0].longitude;
+      console.log(data)
+      let latestLat : number = data.positionLat;
+      let latestLng : number = data.positionLng;
       this.markers.push({
         position: {
           lat: latestLat,
@@ -62,17 +56,23 @@ export class AppComponent {
         },
         label: {
           color: 'red',
-          text: 'Vehicle' + (vehicleId)  + ': ' + (message),
+          text: 'Vehicle' + (vehicleId)  + ': ' + (data.notification),
         },
         title: 'Vehicle Marker',
         options: { animation: google.maps.Animation.BOUNCE},
       });
-      this.center = {
-        lat: this.actualVehicleCoordinates[0].latitude,
-        lng: this.actualVehicleCoordinates[0].longitude
-    }
+      if (latestLat != null && latestLat != null) {
+        this.setCenter(latestLat, latestLng)
+      }
     this.changeZoom(15);
     })
+  }
+
+  setCenter(latitude: number, longitude: number) {
+      this.center = {
+        lat: latitude,
+        lng: longitude
+    }
   }
 
   moveMap(event: google.maps.MapMouseEvent) {

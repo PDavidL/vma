@@ -1,5 +1,6 @@
 package com.vma.backend.controller;
 
+import com.vma.backend.dto.VehicleDto;
 import com.vma.backend.dto.VehicleInRadiusDto;
 import com.vma.backend.entity.CoordinatesEntity;
 import com.vma.backend.entity.NotificationEntity;
@@ -48,6 +49,11 @@ public class VehicleController {
 		return ResponseEntity.ok(vehicleService.getAllVehicles());
 	}
 
+	@GetMapping("/vehicleLatestPositionAndNotification")
+	public ResponseEntity<VehicleDto> getVehicleLatestPositionAndNotification(@RequestParam("vehicleId") Integer vehicleId) {
+		VehicleDto vehicleDto = vehicleService.getVehicleLatestPositionAndNotification(vehicleId);
+		return vehicleDto.getId() != null ? ResponseEntity.ok(vehicleDto) : ResponseEntity.notFound().build();
+	}
 
 	@GetMapping("/vehicleCoordinates")
 	public ResponseEntity<List<CoordinatesEntity>> getVehicleCoordinates(@RequestParam("vehicleId") Integer vehicleId) {

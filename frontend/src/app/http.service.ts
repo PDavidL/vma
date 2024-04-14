@@ -15,6 +15,7 @@ export class HttpService {
   private allVehiclesUrl: string = "/allVehicles";
   private coordinatesUrl: string = "/vehicleCoordinates"
   private latestNotificationUrl: string = "/latestNotification"
+  private vehicleLatestPositionAndNotificationUrl: string = "/vehicleLatestPositionAndNotification"
 
   constructor(private http: HttpClient) { }
 
@@ -32,7 +33,12 @@ export class HttpService {
     const params = new HttpParams()
     .set('vehicleId', id);
     return this.http.get<NotificationDto>(this.buildUrl(this.latestNotificationUrl), {params});
+  }
 
+  getVehicleLatestPositionAndNotification(id: number) : Observable<VehicleDto> {
+    const params = new HttpParams()
+    .set('vehicleId', id);
+    return this.http.get<VehicleDto>(this.buildUrl(this.vehicleLatestPositionAndNotificationUrl), {params});
   }
 
   buildUrl(url : string) : string {
