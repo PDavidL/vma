@@ -74,21 +74,22 @@ export class AppComponent {
       this.httpService.getVehiclesInRadius(this.latestLat, this.latestLng, this.queryRadius).pipe(catchError(() => EMPTY))
       .subscribe(vehicleIdsInRadius => {
         vehicleIdsInRadius.vehicles.forEach(element => {
-          console.log(element.id + 5);
           this.httpService.getVehicleLatestPositionAndNotification(element.id).pipe(catchError(() => EMPTY))
           .subscribe(data => {
-            this.markers.push({
-              position: {
-                lat: data.positionLat,
-                lng: data.positionLng,
-              },
-              label: {
-                color: 'red',
-                text: 'Vehicle' + (data.id)  + ' in the radius of Vehicle' + (vehicleId),
-              },
-              title: 'Vehicle Marker',
-              options: { animation: google.maps.Animation.BOUNCE},
-            });
+            if (data.id != vehicleId) {
+              this.markers.push({
+                position: {
+                  lat: data.positionLat,
+                  lng: data.positionLng,
+                },
+                label: {
+                  color: 'blue',
+                  text: 'Vehicle' + (data.id),
+                },
+                title: 'Vehicle Marker',
+                options: { animation: google.maps.Animation.DROP},
+              });
+            }
           })
         })
       })

@@ -2,21 +2,22 @@
 
 <button class="refreshButton" (click)="reloadVehicles()">Reload Vehicles</button>
 
-<input [value] = "queryRadius" type="number" value="200" (input)="updateQueryRadius($event)">
-
-<div *ngFor="let vehicle of vehicles">
-  <p>Vehicle{{vehicle.id}} </p>
-  <button label="Vehicle" (click)="showOnMap(vehicle.id)">Show on map</button>
-</div>
-
-<google-map #myMap="googleMap"
-            height="450px"
-            width="100:%"
-            [center]="center"
-            [zoom]="zoom"
-            (mapClick)="moveMap($event)"
-            (mapMousemove)="move($event)"
-            (zoomChanged)="changeZoom($event)">
+<div>
+  <div class="vehicleList">
+    <div *ngFor="let vehicle of vehicles">
+      <p>Vehicle{{vehicle.id}} </p>
+      <button label="Vehicle" (click)="showOnMap(vehicle.id)">Show on map</button>
+    </div>
+  </div>
+  <div class="mapWrapper">
+    <google-map
+    width="100:%"
+    [center]="center"
+    [zoom]="zoom"
+    (mapClick)="moveMap($event)"
+    (mapMousemove)="move($event)"
+    (zoomChanged)="changeZoom($event)"
+    >
     <map-marker
     *ngFor="let marker of markers"
     [position]="marker.position"
@@ -24,7 +25,11 @@
     [title]="marker.title"
     [options]="marker.options"
     />            
-</google-map>
+    </google-map>
+    <div>Latitude: {{display?.lat}}</div>
+    <div>Longitude: {{display?.lng}}</div>
+  </div>
 
-<div>Latitude: {{display?.lat}}</div>
-<div>Longitude: {{display?.lng}}</div>
+</div>
+
+
